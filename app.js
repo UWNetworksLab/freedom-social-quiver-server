@@ -1,37 +1,35 @@
-// Copyright 2015, Google, Inc.
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//    http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+/*jslint indent:2, white:true, node:true, sloppy:true*/
+var app = require('express')();
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
 
-'use strict';
-
-var express = require('express');
-
-var app = express();
+server.listen(process.env.PORT || 8080);
 
 
-// [START hello_world]
-// Say hello!
 app.get('/', function(req, res) {
-  res.status(200).send('Hello, world!');
+  res.status(200).send('Hello; socket.io!\n');
 });
-// [END hello_world]
 
+function doEmit(e) {
+  var rooms = e['rooms'];
+  if (!(rooms && typeof rooms.forEach === 'function' && rooms.length > 0)) {
+    return;
+  }
+  var sender = io.sockets;
+  rooms.forEach(function(room) { sender = sender.to(room); });
+  sender.emit('message', e['msg']);
+}
 
-// [START server]
-// Start the server
-var server = app.listen(process.env.PORT || 8080, function () {
-  var host = server.address().address;
-  var port = server.address().port;
+io.on('connection', function(socket) {
+  socket.on('join', socket.join.bind(socket));
+  socket.on('leave', socket.leave.bind(socket));
+  socket.on('emit', doEmit);
 
-  console.log('App listening at http://%s:%s', host, port);
+  var disconnectMessages = [];
+  socket.on('addDisconnectMessage', function(e) {
+    disconnectMessages.push(e);
+  });
+  socket.on('disconnect', function() {
+    disconnectMessages.forEach(doEmit);
+  });
 });
-// [END server]
