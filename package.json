@@ -1,15 +1,14 @@
 {
-  "name": "nodejs-getting-started",
-  "version": "1.0.0",
-  "description": "End to end sample for running Node.JS applications on Google Cloud Platform",
-  "repository": "https://github.com/GoogleCloudPlatform/nodejs-getting-started",
-  "private": true,
+  "name": "freedom-social-quiver-server",
+  "version": "0.0.0",
+  "description": "Ultra-minimal pubsub server",
+  "repository": "https://github.com/uProxy/freedom-social-quiver-server",
   "scripts": {
     "start": "node app.js",
     "monitor": "nodemon app.js",
     "deploy": "gcloud preview app deploy app.yaml"
   },
-  "author": "Jon Wayne Parrott <jonwayne@google.com>, Jonathan Simon <jbsimon@google.com>",
+  "author": "Ben Schwartz <bemasc@uproxy.org>",
   "license": "Apache Version 2.0",
   "dependencies": {
     "express": "^4.12.0",
