@@ -57,4 +57,4 @@ function report() {
     stats.last_update = end;
 }
 
-setInterval(report, 3000);
+setInterval(report, 10000);
