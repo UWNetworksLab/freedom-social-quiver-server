@@ -18,7 +18,7 @@ function safe(f, context) {
     try {
       return f.apply(context, arguments);
     } catch (e) {
-      console.log('Safe error:', e);
+      console.error('Safe error:', e);
     }
   };
 }
