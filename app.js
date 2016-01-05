@@ -14,20 +14,27 @@ app.get('/', function(req, res) {
   res.status(200).send('Hello; socket.io!\n');
 });
 
-function doEmit(e) {
-  var rooms = e['rooms'];
-  if (!(rooms && typeof rooms.forEach === 'function' && rooms.length > 0)) {
-    return;
-  }
-  var sender = io.sockets;
-  rooms.forEach(function(room) { sender = sender.to(room); });
-  sender.emit('message', e['msg']);
-  stats.messages++;
+// Safe replacement for .bind() that also catches any errors.
+// This is used to ensure that malformed client messages do not trigger an
+// uncaught exception.
+function safe(f, context) {
+  return function() {
+    try {
+      return f.apply(context, arguments);
+    } catch (e) {
+      console.error('Safe error:', e);
+    }
+  };
 }
 
+var doEmit = safe(function(e) {
+  io.sockets.to(e['room']).emit('message', e['msg']);
+  stats.messages++;
+});
+
 io.on('connection', function(socket) {
-  socket.on('join', socket.join.bind(socket));
-  socket.on('leave', socket.leave.bind(socket));
+  socket.on('join', safe(socket.join, socket));
+  socket.on('leave', safe(socket.leave, socket));
   socket.on('emit', doEmit);
 
   var disconnectMessages = [];
@@ -37,8 +44,10 @@ io.on('connection', function(socket) {
   socket.on('disconnect', function() {
     disconnectMessages.forEach(doEmit);
   });
-  socket.on('connect_error', function(error) {
-    debug('ERROR: ' + JSON.stringify(error));
+
+  // See https://www.joyent.com/developers/node/design/errors
+  socket.on('error', function(err) {
+    console.log('Error:', err);
   });
 });
 
