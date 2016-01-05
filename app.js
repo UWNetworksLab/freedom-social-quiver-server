@@ -38,23 +38,23 @@ io.on('connection', function(socket) {
     disconnectMessages.forEach(doEmit);
   });
   socket.on('connect_error', function(error) {
-      debug('ERROR: ' + JSON.stringify(error));
+    debug('ERROR: ' + JSON.stringify(error));
   });
 });
 
 function report() {
-    var end = process.hrtime();
-    if (stats.last_update) {
-        var delta_t_sec = (((end[0] - stats.last_update[0]) * 1000000000) +
-            (end[1] - stats.last_update[1])) / 1000000000;
-        debug("clients: " + io.engine.clientsCount + ", message rate: " +
-              sprintf("%8.3f msg/sec", stats.messages / delta_t_sec));
-    } else {
-        debug("clients: " + io.engine.clientsCount + ", so far " +
-              stats.messages + " messages sent");
-    }
-    stats.messages = 0;
-    stats.last_update = end;
+  var end = process.hrtime();
+  if (stats.last_update) {
+    var delta_t_sec = end[0] - stats.last_update[0] +
+      ((end[1] - stats.last_update[1]) / 1e9);
+    debug("clients: " + io.engine.clientsCount + ", message rate: " +
+          sprintf("%8.3f msg/sec", stats.messages / delta_t_sec));
+  } else {
+    debug("clients: " + io.engine.clientsCount + ", so far " +
+          stats.messages + " messages sent");
+  }
+  stats.messages = 0;
+  stats.last_update = end;
 }
 
 setInterval(report, 10000);
