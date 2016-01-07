@@ -48,3 +48,29 @@
          * ```PORT=3000 node /usr/local/freedom-social-quiver-server/app.js ```
   * Reboot the machine for changes to take effect: ```sudo reboot```.  You will need to reconnect to the SSH window after this.
 * Test your new IP address by visiting http://**YourIPAddress**.  It should display a ```Hello; socket.io!``` page.  You can find your IP address under "External IP" in the Google Cloud Platform console.
+
+# How to setup Amazon CloudFront for your Quiver server
+* [Login to AWS via CloudFront page](https://aws.amazon.com/cloudfront/)
+ * Note: info@uproxy.org is already setup for an account
+* Click CloudFront under "Storage & Content Delivery"
+* Click Create Distribution
+* Under "Web", click "Get Started"
+* Configure your distribution:
+ * Under "Origin Settings":
+     * Enter Origin Domain Name, e.g. "quiver-test.appspot.com". Note if you don't have a domain name, you can use xip.io, e.g. "123.234.345.456.xip.io"
+     * Make sure "Origin Protocol Policy" is "HTTP Only" (Quiver server on GCE currently only supports HTTP traffic, however traffic to cloudfront will be encrypted and all data passed through the Quiver server is end-to-end encrypted by freedom-social-quiver client).
+     * Use default values for all other fields in Origin Settings
+ * Under "Default Cache Behavior Settings":
+     * Set "Viewer Protocol Policy" to "HTTPS Only" (only allow secure traffic from client to CloudFront)
+     * Set "Allowed HTTP Methods" to "GET, HEAD, OPTIONS, PUT, POST, PATCH, DELETE"
+     * Set "Forard Headers" to "Whitelist"
+     * Add the following 5 headers to "Whitelist Headers": ```Content-type``` ```Origin``` ```User-Agent``` ```X-DevTools-Emulate-Network-Conditions-Client-Id``` ```X-Session-Id```
+     * Set "Forward Cookies" to "All"
+     * Set "Forward Query Strings" to "Yes"
+     * All other fields can use the default values in "Default Cache Behavior Settings"
+ * Use default settings for all fields in "Distribution Settings"
+ * Click "Create Distribution"
+* Once your distribution is created, visit the "General" settings page for that distribution:
+ * Wait for "Distribution Status" to be Deployed
+ * Copy the Domain Name (e.g. d1j0v91oi5t6ys.cloudfront.net)
+* Once your new distribution is created and deployed, you can disguise traffic to the Quiver server by making HTTPS requests to "https://a0.awsstatic.com" and setting the "Host" header to your Domain Name (e.g. "d1j0v91oi5t6ys.cloudfront.net")
