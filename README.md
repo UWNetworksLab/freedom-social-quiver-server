@@ -63,7 +63,7 @@
  * Under "Default Cache Behavior Settings":
      * Set "Viewer Protocol Policy" to "HTTPS Only" (only allow secure traffic from client to CloudFront)
      * Set "Allowed HTTP Methods" to "GET, HEAD, OPTIONS, PUT, POST, PATCH, DELETE"
-     * Set "Forard Headers" to "Whitelist"
+     * Set "Forward Headers" to "Whitelist"
      * Add the following 5 headers to "Whitelist Headers": ```Content-type``` ```Origin``` ```User-Agent``` ```X-DevTools-Emulate-Network-Conditions-Client-Id``` ```X-Session-Id```
      * Set "Forward Cookies" to "All"
      * Set "Forward Query Strings" to "Yes"
