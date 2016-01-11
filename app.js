@@ -4,9 +4,9 @@ var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var process = require('process');
 var debug = require('debug')('stats');
-var stats = { 'messages' : 0, 'last_update' : null };
 var sprintf = require("sprintf").sprintf;
 
+var stats = { 'messages' : 0, 'last_update' : null };
 server.listen(process.env.PORT || 8080);
 
 
@@ -55,12 +55,12 @@ function report() {
   var end = process.hrtime();
   if (stats.last_update) {
     var delta_t_sec = end[0] - stats.last_update[0] +
-      ((end[1] - stats.last_update[1]) / 1e9);
-    debug("clients: " + io.engine.clientsCount + ", message rate: " +
-          sprintf("%8.3f msg/sec", stats.messages / delta_t_sec));
+        ((end[1] - stats.last_update[1]) / 1e9);
+    debug('clients: ' + io.engine.clientsCount + ', message rate: ' +
+          sprintf('%8.3f msg/sec', stats.messages / delta_t_sec));
   } else {
-    debug("clients: " + io.engine.clientsCount + ", so far " +
-          stats.messages + " messages sent");
+    debug('clients: ' + io.engine.clientsCount + ', so far ' +
+          stats.messages + ' messages sent');
   }
   stats.messages = 0;
   stats.last_update = end;
