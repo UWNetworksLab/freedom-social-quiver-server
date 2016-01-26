@@ -34,20 +34,26 @@
      * Click to expand "Networking"
      * Under "External IP" choose new static IP address.  Enter any name and click reserve
   * Click "Create"
-* Click "SSH" under the "Connect" column.  Run the following in the SSH window to install dependencies and start a Quiver server:
-  * Install dev tools:
-     * ```curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash```
-     * ```sudo apt-get install -y nodejs```
-     * ```sudo apt-get install build-essential```
-     * ```sudo apt-get install git-all```
-  * Download and build the Quiver server:
-     * ```sudo git clone https://github.com/uproxy/freedom-social-quiver-server /usr/local/freedom-social-quiver-server;  cd /usr/local/freedom-social-quiver-server;  npm install;```
-  * Edit /etc/rc.local (requires sudo)
-     * Add the following lines **BEFORE** the call to ```exit 0```
-         * ```iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 3000```
-         * ```PORT=3000 node /usr/local/freedom-social-quiver-server/app.js ```
-  * Reboot the machine for changes to take effect: ```sudo reboot```.  You will need to reconnect to the SSH window after this.
+* Click "SSH" under the "Connect" column.  Then see the section titled **How to setup uProxy using SSH**
+
+# How to setup uProxy using SSH
+* SSH into your machine.  See above instructions for help with setting up a virtual machine on Google Compute Engine or Digital Ocean
+* Install dev tools:
+ * ```curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash```
+ * ```sudo apt-get install -y nodejs```
+ * ```sudo apt-get install build-essential```
+ * ```sudo apt-get install git-all```
+* Download and build the Quiver server:
+ * ```sudo git clone https://github.com/uproxy/freedom-social-quiver-server /usr/local/freedom-social-quiver-server;  cd /usr/local/freedom-social-quiver-server;  npm install;```
+* Edit /etc/rc.local (requires sudo)
+  * Add the following lines **BEFORE** the call to ```exit 0```
+     * ```exec 2> /usr/local/freedom-social-quiver-server/logs.`date '+%Y%m%d-%H%M%S'`;```
+     * ```exec 1>&2;```
+     * ```iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 3000;```
+     * ```PORT=3000 DEBUG=stats node /usr/local/freedom-social-quiver-server/app.js;```
+* Reboot the machine for changes to take effect: ```sudo reboot```.  You will need to reconnect to the SSH window after this.
 * Test your new IP address by visiting http://**YourIPAddress**.  It should display a ```Hello; socket.io!``` page.  You can find your IP address under "External IP" in the Google Cloud Platform console.
+* You will be able to see logs for your Quiver server by looking at the ```/usr/local/freedom-social-quiver-server/logs.*``` files on your machine.
 
 # How to setup Amazon CloudFront for your Quiver server
 * [Login to AWS via CloudFront page](https://aws.amazon.com/cloudfront/)
