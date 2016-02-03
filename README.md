@@ -50,8 +50,8 @@
 * Install dev tools:
  * ```curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash```
  * ```sudo apt-get install -y nodejs```
- * ```sudo apt-get install build-essential```
- * ```sudo apt-get install git-all```
+ * ```sudo apt-get install -y build-essential```
+ * ```sudo apt-get install -y git-all```
 * Download and build the Quiver server:
  * ```sudo git clone https://github.com/uproxy/freedom-social-quiver-server /usr/local/freedom-social-quiver-server;  cd /usr/local/freedom-social-quiver-server;  npm install;```
 * Edit /etc/rc.local (requires sudo)
