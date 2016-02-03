@@ -1,7 +1,7 @@
 /*jslint indent:2, white:true, node:true, sloppy:true*/
 var app = require('express')();
 var server = require('http').Server(app);
-var io = require('socket.io')(server);
+var io = require('socket.io')(server, {cookie: false});
 var process = require('process');
 var debug = require('debug')('stats');
 var sprintf = require("sprintf").sprintf;
