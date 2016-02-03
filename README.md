@@ -19,6 +19,15 @@
  * Run ```gcloud preview app deploy app.yaml --promote```
 * Now your quiver server is running at ```https://<your_app_id>.appspot.com```
 
+# How to start a Quiver server on Digital Ocean
+* Create a new Digital Ocean account and setup billing at [digitalocean.com](http://digitalocean.com)
+* Click "Create Droplet"
+ * Choose Ubuntu, $5/mo, any region
+ * No additional option are necessary
+ * Add SSH keys following [these instructions](https://www.digitalocean.com/community/tutorials/how-to-use-ssh-keys-with-digitalocean-droplets)
+ * Click "Create"
+* SSH into your Droplet by running ```ssh -i <path_to_your_ssh_key> root@<your_ip_address>```, then follow instructions from **How to setup uProxy using SSH**
+
 # How to start a Quiver server on Google Compute Engine
 * Create a new compute engine project:
   * Open the [Cloud Platform Console](https://console.cloud.google.com/?_ga=1.8589557.1999999848.1449090455).
