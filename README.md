@@ -47,18 +47,8 @@
 
 # How to setup uProxy using SSH
 * SSH into your machine.  See above instructions for help with setting up a virtual machine on Google Compute Engine or Digital Ocean
-* Install dev tools:
- * ```curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash```
- * ```sudo apt-get install -y nodejs```
- * ```sudo apt-get install -y build-essential```
- * ```sudo apt-get install -y git-all```
-* Download and build the Quiver server:
- * ```sudo git clone https://github.com/uproxy/freedom-social-quiver-server /usr/local/freedom-social-quiver-server;  cd /usr/local/freedom-social-quiver-server;  npm install;```
-* Edit /etc/rc.local (requires sudo)
-  * Add the following lines **BEFORE** the call to ```exit 0```
-     * ```iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 3000;```
-     * ```PORT=3000 DEBUG=stats node /usr/local/freedom-social-quiver-server/app.js 2>&1 | logger -t quiver;```
-* Reboot the machine for changes to take effect: ```sudo reboot```.  You will need to reconnect to the SSH window after this.
+* Install and start the Quiver server by running ```curl https://raw.githubusercontent.com/uProxy/uproxy-docker/master/install-quiver.sh | sh```
+ * This will install docker on your machine, run the uproxy/quiver docker image, and use port 80 (HTTP) for Quiver server traffic
 * Test your new IP address by visiting http://**YourIPAddress**.  It should display a ```Hello; socket.io!``` page.  You can find your IP address under "External IP" in the Google Cloud Platform console.
 * Logs for your Quiver server will be in your system logs with the "quiver" tag.  To see the logs you can run ```grep quiver /var/log/syslog```.
 
