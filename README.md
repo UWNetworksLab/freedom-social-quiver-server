@@ -47,7 +47,7 @@
 
 # How to setup uProxy using SSH
 * SSH into your machine.  See above instructions for help with setting up a virtual machine on Google Compute Engine or Digital Ocean
-* Install and start the Quiver server by running ```curl https://raw.githubusercontent.com/uProxy/uproxy-docker/master/install-quiver.sh | sh```
+* Install and start the Quiver server by running ```curl https://raw.githubusercontent.com/uProxy/uproxy/master/install-quiver.sh | sh```
  * This will install docker on your machine, run the uproxy/quiver docker image, and use port 80 (HTTP) for Quiver server traffic
 * Test your new IP address by visiting http://**YourIPAddress**.  It should display a ```Hello; socket.io!``` page.  You can find your IP address under "External IP" in the Google Cloud Platform console.
 * Logs for your Quiver server will be in your system logs with the "quiver" tag.  To see the logs you can run ```grep quiver /var/log/syslog```.
